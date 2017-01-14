@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Player {
 
-    static final String VERSION = "CoolFoxBme will totally defeat Angry Piglets";
+    static final String VERSION = "CoolFoxBme";
     public static final double BIG_BET_TRESHOLD = 0.2;
 
     private static GameState gameState;
