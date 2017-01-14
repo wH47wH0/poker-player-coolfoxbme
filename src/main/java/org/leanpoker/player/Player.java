@@ -8,6 +8,7 @@ public class Player {
 
     static final String VERSION = "CoolFoxBme";
     public static final double BIG_BET_TRESHOLD = 0.2;
+    public static final boolean USE_ALTERNATIVE_MAGIC = true;
 
     private static GameState gameState;
 
@@ -20,11 +21,62 @@ public class Player {
 
 
         if (Player.gameState.getCommunityCards() == null || Player.gameState.getCommunityCards().size() == 0) {
-            return preFlop(ourBet, betToCall, holeCards);
+            return USE_ALTERNATIVE_MAGIC ? preFlopAlternative(ourBet, betToCall, holeCards) : preFlop(ourBet, betToCall, holeCards);
         } else { // POSTFLOP
             return PostFlop.postFlop(gameState,holeCards);
-//            return preFlop(ourBet, betToCall, holeCards);
         }
+    }
+
+    private static int preFlopAlternative(double ourBet, double betToCall, List<Card> holeCards) {
+        System.out.println("Pot: " + gameState.getPot() + ", CurrentBuyIn: " + gameState.getCurrentBuyIn());
+        if (avgStackToBigBlindRation() < 10) {
+            if (HoleCards.facecards(holeCards) ||
+                    HoleCards.aceXhands(holeCards) ||
+                    HoleCards.pocketPair(holeCards) ||
+                    (HoleCards.connector(holeCards) && HoleCards.sameSuit(holeCards) && HoleCards.highcards(holeCards, 7))) {
+                return (int)getOurPlayer().getStack();
+            } else {
+                return 0;
+            }
+        } else {
+            if (gameState.getCurrentBuyIn() <= bigBlind()) {
+                return minimumRaise(ourBet, betToCall);
+            } else if (gameState.getCurrentBuyIn() < getOurPlayer().getStack()/5) {
+                if (gameState.getBetIndex() < numberOfActiveOrFoldedPlayers()) {
+                    if (HoleCards.pocketPair(holeCards) && HoleCards.highcards(holeCards, 11) ||
+                            HoleCards.aceXhands(holeCards) && HoleCards.highcards(holeCards, 12)) {
+                        return (int)getOurPlayer().getStack();
+                    } else if (HoleCards.facecards(holeCards) ||
+                            HoleCards.aceXhands(holeCards) && HoleCards.highcards(holeCards, 10)) {
+                        return callValue(ourBet, betToCall);
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    if (HoleCards.pocketPair(holeCards) && HoleCards.highcards(holeCards, 12) ||
+                            HoleCards.aceXhands(holeCards) && HoleCards.highcards(holeCards, 13)) {
+                        return (int)getOurPlayer().getStack();
+                    } else if (HoleCards.facecards(holeCards) ||
+                            HoleCards.aceXhands(holeCards) && HoleCards.highcards(holeCards, 10)) {
+                        return callValue(ourBet, betToCall);
+                    } else {
+                        return 0;
+                    }
+                }
+            } else {
+                if (HoleCards.pocketPair(holeCards) && HoleCards.highcards(holeCards, 12) ||
+                        HoleCards.aceXhands(holeCards) && HoleCards.highcards(holeCards, 13)) {
+                    return (int)getOurPlayer().getStack();
+                } else {
+                    return 0;
+                }
+            }
+
+        }
+    }
+
+    private static int numberOfActiveOrFoldedPlayers() {
+        return (int)gameState.getPlayers().stream().filter(p -> !"out".equals(p.getStatus())).count();
     }
 
     private static int preFlop(double ourBet, double betToCall, List<Card> holeCards) {
