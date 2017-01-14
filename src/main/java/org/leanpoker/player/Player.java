@@ -2,6 +2,8 @@ package org.leanpoker.player;
 
 import com.google.gson.JsonElement;
 
+import java.util.List;
+
 public class Player {
 
     static final String VERSION = "CoolFoxBme";
@@ -11,7 +13,14 @@ public class Player {
     public static int betRequest(GameState gameState) {
         double ourBet = getOurPlayer(gameState).getBet();
         double betToCall = gameState.getCurrentBuyIn();
+
+        List<Card> holeCards = getOurPlayer(gameState).getHoleCards();
+
+        if (HoleCards.pocketPair(holeCards) || (HoleCards.aceXhands(holeCards) && HoleCards.highcards(holeCards, 10))) {
+
         return (int) (betToCall - ourBet + gameState.getMinimumRaise());
+        }
+        return 0;
     }
 
     public static void showdown(JsonElement game) {
@@ -26,4 +35,5 @@ public class Player {
     private static Opponent getOurPlayer(GameState gameState) {
         return gameState.getPlayers().get(gameState.getInAction());
     }
+
 }
