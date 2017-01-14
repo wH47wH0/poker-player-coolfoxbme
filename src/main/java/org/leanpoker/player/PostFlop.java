@@ -30,7 +30,7 @@ public class PostFlop {
             if ((commCardStrength != handStrength) && handStrength >= 2) {
                 // if we have at least a pair in hand
                 if (handStrength >= 4) {
-                    // if we have at least a drill
+                    // if we have at least a drill or pair + flushdraw
                     return (int) ourStack;
                     // all in
                 } else return Player.callValue(ourBet, betToCall);
@@ -41,6 +41,10 @@ public class PostFlop {
             // we have at least a drill with our hole cards
             return (int) ourStack;
             // all in
+        } else if ((commCardStrength != handStrength) && handStrength >= 3) {
+            // we have at least two pairs with our hole cards
+            return Player.callValue(ourBet, betToCall);
+            // call
         } else return 0;
         // fold
     }
