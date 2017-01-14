@@ -20,16 +20,25 @@ public class PostFlop {
 //        return checkStrength(handStrength, gameState);
 
         if (betToCall == gameState.getSmallBlind() * 2) {
+            // raise if no bet
             return Player.minimumRaise(ourBet, betToCall);
         } else if (betToCall < ourStack/3) {
             if ((commCardStrength != handStrength) && handStrength >= 2) {
+                // if we have at least a pair in hand
                 if (handStrength >= 4) {
+                    // if we have at least a drill
                     return (int) ourStack;
-                } else {
-                    return  Player.callValue(ourBet, betToCall);
-                }
-            } else return Player.minimumRaise(ourBet, betToCall);
+                    // all in
+                } else return Player.callValue(ourBet, betToCall);
+                // or call
+            } return 0;
+            // we don't have anything within the hole cards, we fold
+        } else if ((commCardStrength != handStrength) && handStrength >= 4) {
+            // we have at least a drill with our hole cards
+            return (int) ourStack;
+            // all in
         } else return 0;
+        // fold
     }
 
     private static List<Card> getHand(GameState gameState, List<Card> holeCards) {
