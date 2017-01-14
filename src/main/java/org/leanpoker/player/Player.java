@@ -16,11 +16,19 @@ public class Player {
 
         List<Card> holeCards = getOurPlayer(gameState).getHoleCards();
 
+        if (firstPlayer(gameState)) {
+            if (gameState.getCurrentBuyIn() <= bigBlind(gameState)) {
+                return minimumRaise(gameState, ourBet, betToCall);
+            }
+        }
+
         // ALLIN ES MAGAS PAR, STACKET BERAKNI
         if (isBigBet(gameState) && HoleCards.isHighPair(holeCards)) {
             return (int) getOurPlayer(gameState).getStack();
         } else if (isBigBet(gameState) && !HoleCards.isHighPair(holeCards)) {
             return 0; // allin, de nincs magas kartyank
+        } else if (firstPlayer(gameState) && gameState.getCurrentBuyIn() <= bigBlind(gameState)) {
+            return minimumRaise(gameState, ourBet, betToCall);
         } else if (shouldRaise(holeCards)) {
             if (goodStartingCards(holeCards)) {
                 return callValue(ourBet, betToCall) + gameState.getPot();
@@ -33,6 +41,10 @@ public class Player {
             return callValue(ourBet, betToCall);
         }
         return 0;
+    }
+
+    private static boolean firstPlayer(GameState gameState) {
+        return ((gameState.getDealer()+1) % gameState.getPlayers().size()) == gameState.getInAction();
     }
 
     private static boolean goodStartingCards(List<Card> cards) {
