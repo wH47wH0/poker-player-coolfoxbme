@@ -5,7 +5,7 @@ package org.leanpoker.player;
  */
 public abstract class ValueConverter {
 
-    public int convertFaceValue(String rawValue) {
+    public static int convertFaceValue(String rawValue) {
         switch (rawValue) {
             case "J":
                 return 11;
