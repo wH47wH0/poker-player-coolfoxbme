@@ -7,6 +7,10 @@ import java.util.List;
  */
 public class HoleCards {
 
+    public static boolean isHighPair(List<Card> cards) {
+        return HoleCards.pocketPair(cards) && HoleCards.highcards(cards, 11);
+    }
+
     public static boolean pocketPair(List<Card> cards) {
         return cards.get(0).getRank() == cards.get(1).getRank();
     }

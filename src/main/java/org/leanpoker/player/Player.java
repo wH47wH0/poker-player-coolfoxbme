@@ -17,10 +17,14 @@ public class Player {
         List<Card> holeCards = getOurPlayer(gameState).getHoleCards();
 
         // ALLIN ES MAGAS PAR, STACKET BERAKNI
-        if (isBigBet(gameState) && HoleCards.pocketPair(holeCards) && HoleCards.highcards(holeCards, 11)) {
+        if (isBigBet(gameState) && HoleCards.isHighPair(holeCards)) {
             return (int) getOurPlayer(gameState).getStack();
+        } else if (isBigBet(gameState) && !HoleCards.isHighPair(holeCards)) {
+            return 0; // allin, de nincs magas kartyank
         } else if (shouldRaise(holeCards)) {
             return (int) (betToCall - ourBet + gameState.getMinimumRaise());
+        } else if (mikiMagic2(gameState)) {
+            return  (int)(betToCall - ourBet);
         }
         return 0;
     }
@@ -35,6 +39,11 @@ public class Player {
                 (HoleCards.connector(cards) && HoleCards.sameSuit(cards)) ||
                 (HoleCards.connector(cards) && HoleCards.highcards(cards, 7)) ||
                 HoleCards.facecards(cards);
+    }
+
+    private static boolean mikiMagic2(GameState gameState) {
+        int bigBlind = gameState.getSmallBlind() * 2;
+        return gameState.getCurrentBuyIn() > bigBlind && !isBigBet(gameState);
     }
 
     private static boolean isBigBet(GameState gameState) {
