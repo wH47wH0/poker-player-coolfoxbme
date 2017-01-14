@@ -10,7 +10,6 @@ public class Player {
 
     public static int betRequest(GameState gameState) {
         double ourBet = getOurPlayer(gameState).getBet();
-
         double betToCall = gameState.getCurrentBuyIn();
         return (int) (betToCall - ourBet + gameState.getMinimumRaise());
     }
@@ -25,11 +24,6 @@ public class Player {
     }
 
     private static Opponent getOurPlayer(GameState gameState) {
-        for (Opponent player : gameState.getPlayers()) {
-            if (IN_ACTION.equals(player.getStatus())) {
-                return player;
-            }
-        }
-        return null;
+        return gameState.getPlayers().get(gameState.getInAction());
     }
 }
