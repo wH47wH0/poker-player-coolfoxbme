@@ -44,6 +44,7 @@ public class Player {
             return minimumRaise(ourBet, betToCall);
         } else if (shouldRaise(holeCards)) {
             if (goodStartingCards(holeCards)) {
+                System.out.println("callValue: " + callValue(ourBet, betToCall) + " pot: " + gameState.getPot());
                 return callValue(ourBet, betToCall) + gameState.getPot();
             } else if (gameState.getCurrentBuyIn() <= bigBlind()) {
                 return minimumRaise(ourBet, betToCall);
