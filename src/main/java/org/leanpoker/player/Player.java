@@ -7,21 +7,29 @@ import java.util.List;
 public class Player {
 
     static final String VERSION = "CoolFoxBme";
-    public static final String IN_ACTION = "in_action";
     public static final double BIG_BET_TRESHOLD = 0.2;
 
-    private static GameState currentGameState;
+    private static GameState gameState;
 
     public static int betRequest(GameState gameState) {
-        currentGameState = gameState;
-        double ourBet = getOurPlayer(gameState).getBet();
+        Player.gameState = gameState;
+        double ourBet = getOurPlayer().getBet();
         double betToCall = gameState.getCurrentBuyIn();
 
-        List<Card> holeCards = getOurPlayer(gameState).getHoleCards();
+        List<Card> holeCards = getOurPlayer().getHoleCards();
 
-        // ALLIN ES MAGAS PAR, STACKET BERAKNI
-        if (isAllin() && HoleCards.isHighPair(holeCards)) {
-            return (int) getOurPlayer(gameState).getStack();
+
+        if (Player.gameState.getCommunityCards() == null || Player.gameState.getCommunityCards().size() == 0) {
+            return preFlop(ourBet, betToCall, holeCards);
+        } else { // POSTFLOP
+            // TODO: postflop
+            return preFlop(ourBet, betToCall, holeCards);
+        }
+    }
+
+    private static int preFlop(double ourBet, double betToCall, List<Card> holeCards) {
+        if (isAllin() && HoleCards.isHighPair(holeCards)) { // // ALLIN ES MAGAS PAR, STACKET BERAKNI
+            return (int) getOurPlayer().getStack();
         } else if (isAllin() && !HoleCards.isHighPair(holeCards)) {
             return 0; // allin, de nincs magas kartyank
         } else if (firstPlayer() && gameState.getCurrentBuyIn() <= bigBlind()) {
@@ -40,8 +48,13 @@ public class Player {
         return 0;
     }
 
+    private static int postFlop() {
+        // TODO: implement me
+        return 0;
+    }
+
     private static boolean firstPlayer() {
-        return ((currentGameState.getDealer()+1) % currentGameState.getPlayers().size()) == currentGameState.getInAction();
+        return ((gameState.getDealer()+1) % gameState.getPlayers().size()) == gameState.getInAction();
     }
 
     private static boolean goodStartingCards(List<Card> cards) {
@@ -52,7 +65,7 @@ public class Player {
     }
 
     private static int minimumRaise(double ourBet, double betToCall) {
-        return callValue(ourBet, betToCall) + currentGameState.getMinimumRaise();
+        return callValue(ourBet, betToCall) + gameState.getMinimumRaise();
     }
 
     private static int callValue(double ourBet, double betToCall) {
@@ -73,20 +86,20 @@ public class Player {
 
     private static boolean mikiMagic2() {
         int bigBlind = bigBlind();
-        return currentGameState.getCurrentBuyIn() > bigBlind && !isAllin();
+        return gameState.getCurrentBuyIn() > bigBlind && !isAllin();
     }
 
     private static int bigBlind() {
-        return currentGameState.getSmallBlind() * 2;
+        return gameState.getSmallBlind() * 2;
     }
 
     private static boolean isAllin() {
-        double betNeeded = currentGameState.getCurrentBuyIn() - getOurPlayer(currentGameState).getBet();
-        double betNeededToStackRatio = betNeeded / getOurPlayer(currentGameState).getStack();
+        double betNeeded = gameState.getCurrentBuyIn() - getOurPlayer().getBet();
+        double betNeededToStackRatio = betNeeded / getOurPlayer().getStack();
         return betNeededToStackRatio > BIG_BET_TRESHOLD;
     }
 
-    private static Opponent getOurPlayer(GameState gameState) {
+    private static Opponent getOurPlayer() {
         return gameState.getPlayers().get(gameState.getInAction());
     }
 
