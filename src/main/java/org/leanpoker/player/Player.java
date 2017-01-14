@@ -42,6 +42,8 @@ public class Player {
         } else {
             if (gameState.getCurrentBuyIn() <= bigBlind()) {
                 return minimumRaise(ourBet, betToCall);
+            } else if (gameState.getCurrentBuyIn() < gameState.getPot() / 4) {
+                return callValue(ourBet, betToCall);
             } else if (gameState.getCurrentBuyIn() < getOurPlayer().getStack()/5) {
                 if (gameState.getBetIndex() < numberOfActiveOrFoldedPlayers()) {
                     if (HoleCards.pocketPair(holeCards) && HoleCards.highcards(holeCards, 11) ||
