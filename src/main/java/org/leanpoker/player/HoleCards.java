@@ -7,6 +7,10 @@ import java.util.List;
  */
 public class HoleCards {
 
+    public static boolean isHighPair(List<Card> cards) {
+        return HoleCards.pocketPair(cards) && HoleCards.highcards(cards, 11);
+    }
+
     public static boolean pocketPair(List<Card> cards) {
         return cards.get(0).getRank() == cards.get(1).getRank();
     }
@@ -19,7 +23,7 @@ public class HoleCards {
         return cards.get(0).getRank() >= high && cards.get(1).getRank() >= high;
     }
 
-    private static boolean facecards(List<Card> cards) {
+    public static boolean facecards(List<Card> cards) {
         return highcards(cards, 10);
     }
 
@@ -35,7 +39,7 @@ public class HoleCards {
         return Math.abs(cards.get(0).getRank() - cards.get(1).getRank()) == 3;
     }
 
-    private static boolean sameSuit(List<Card> cards) {
+    public static boolean sameSuit(List<Card> cards) {
         return cards.get(0).getSuit().equals(cards.get(1).getSuit());
     }
 }
