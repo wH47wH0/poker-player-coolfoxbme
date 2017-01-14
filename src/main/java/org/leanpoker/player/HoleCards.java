@@ -19,6 +19,10 @@ public class HoleCards {
         return cards.get(0).getRank() >= high && cards.get(1).getRank() >= high;
     }
 
+    private static boolean facecards(List<Card> cards) {
+        return highcards(cards, 10);
+    }
+
     public static boolean connector(List<Card> cards) {
         return Math.abs(cards.get(0).getRank() - cards.get(1).getRank()) == 1;
     }
