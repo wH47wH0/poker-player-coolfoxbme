@@ -1,37 +1,41 @@
 package org.leanpoker.player;
 
+import java.util.List;
+
 /**
  * Created by miki on 2017. 01. 14..
  */
 public class HoleCards {
 
-
-    private static boolean pocketPair(Integer val1, Integer val2) {
-        return val1.equals(val2);
+    public static boolean pocketPair(List<Card> cards) {
+        return cards.get(0).getRank() == cards.get(1).getRank();
     }
 
-    private static boolean aceXhads(Integer val1, Integer val2) {
-        return val1 == 14 || val2 == 14;
+    public static boolean aceXhands(List<Card> cards) {
+        return cards.get(0).getRank() == 14 || cards.get(1).getRank() == 14;
     }
 
-    private static boolean highcards(Integer val1, Integer val2, Integer high) {
-        high = 8;
-        return val1 >= high && val2 >= high;
+    public static boolean highcards(List<Card> cards, Integer high) {
+        return cards.get(0).getRank() >= high && cards.get(1).getRank() >= high;
     }
 
-    private static boolean connector(Integer val1, Integer val2) {
-        return Math.abs(val1 - val2) == 1;
+    private static boolean facecards(List<Card> cards) {
+        return highcards(cards, 10);
     }
 
-    private static boolean oneGapper(Integer val1, Integer val2) {
-        return Math.abs(val1 - val2) == 2;
+    public static boolean connector(List<Card> cards) {
+        return Math.abs(cards.get(0).getRank() - cards.get(1).getRank()) == 1;
     }
 
-    private static boolean twoGapper(Integer val1, Integer val2) {
-        return Math.abs(val1 - val2) == 3;
+    public static boolean oneGapper(List<Card> cards) {
+        return Math.abs(cards.get(0).getRank() - cards.get(1).getRank()) == 2;
     }
 
-    private static boolean sameSuit(String suit1, String suit2) {
-        return suit1.equals(suit2);
+    public static boolean twoGapper(List<Card> cards) {
+        return Math.abs(cards.get(0).getRank() - cards.get(1).getRank()) == 3;
+    }
+
+    private static boolean sameSuit(List<Card> cards) {
+        return cards.get(0).getSuit().equals(cards.get(1).getSuit());
     }
 }
