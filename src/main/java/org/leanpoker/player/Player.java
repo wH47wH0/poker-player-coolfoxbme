@@ -2,6 +2,7 @@ package org.leanpoker.player;
 
 import com.google.gson.JsonElement;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class Player {
@@ -29,7 +30,7 @@ public class Player {
 
     private static int preFlopAlternative(double ourBet, double betToCall, List<Card> holeCards) {
         System.out.println("Pot: " + gameState.getPot() + ", CurrentBuyIn: " + gameState.getCurrentBuyIn());
-        if (avgStackToBigBlindRation() < 10) {
+        if (maximumStackLessThanOurs() / bigBlind() < 10) {
             if (HoleCards.facecards(holeCards) ||
                     HoleCards.aceXhands(holeCards) ||
                     HoleCards.pocketPair(holeCards) ||
@@ -186,4 +187,11 @@ public class Player {
         return gameState.getPlayers().get(gameState.getInAction());
     }
 
+    private static double maximumStackLessThanOurs() {
+        Opponent ourPlayer = getOurPlayer();
+        return gameState.getPlayers().stream()
+                .filter(p -> p.getStack() < ourPlayer.getStack())
+                .map(Opponent::getStack)
+                .max(Comparator.naturalOrder()).orElse(0.0);
+    }
 }
