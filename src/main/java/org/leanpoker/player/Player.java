@@ -19,13 +19,22 @@ public class Player {
         // ALLIN ES MAGAS PAR, STACKET BERAKNI
         if (isBigBet(gameState) && HoleCards.pocketPair(holeCards) && HoleCards.highcards(holeCards, 11)) {
             return (int) getOurPlayer(gameState).getStack();
-        } else if (HoleCards.pocketPair(holeCards) || (HoleCards.aceXhands(holeCards) && HoleCards.highcards(holeCards, 10))) {
+        } else if (shouldRaise(holeCards)) {
             return (int) (betToCall - ourBet + gameState.getMinimumRaise());
         }
         return 0;
     }
 
     public static void showdown(JsonElement game) {
+    }
+
+    // Miki magic logika :)
+    private static boolean shouldRaise(List<Card> cards) {
+        return HoleCards.pocketPair(cards) ||
+                HoleCards.aceXhands(cards) ||
+                (HoleCards.connector(cards) && HoleCards.sameSuit(cards)) ||
+                (HoleCards.connector(cards) && HoleCards.highcards(cards, 7)) ||
+                HoleCards.facecards(cards);
     }
 
     private static boolean isBigBet(GameState gameState) {
