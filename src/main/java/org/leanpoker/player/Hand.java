@@ -26,11 +26,11 @@ public class Hand {
     }
 
     public static boolean hasFlush(List<Card> hand){
-
+        return false;
     }
 
     public static boolean hasStraight(List<Card> hand){
-
+        return false;
     }
 
 
