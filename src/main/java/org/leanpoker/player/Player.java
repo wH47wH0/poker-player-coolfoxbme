@@ -10,41 +10,38 @@ public class Player {
     public static final String IN_ACTION = "in_action";
     public static final double BIG_BET_TRESHOLD = 0.2;
 
+    private static GameState currentGameState;
+
     public static int betRequest(GameState gameState) {
+        currentGameState = gameState;
         double ourBet = getOurPlayer(gameState).getBet();
         double betToCall = gameState.getCurrentBuyIn();
 
         List<Card> holeCards = getOurPlayer(gameState).getHoleCards();
 
-        if (firstPlayer(gameState)) {
-            if (gameState.getCurrentBuyIn() <= bigBlind(gameState)) {
-                return minimumRaise(gameState, ourBet, betToCall);
-            }
-        }
-
         // ALLIN ES MAGAS PAR, STACKET BERAKNI
-        if (isBigBet(gameState) && HoleCards.isHighPair(holeCards)) {
+        if (isAllin() && HoleCards.isHighPair(holeCards)) {
             return (int) getOurPlayer(gameState).getStack();
-        } else if (isBigBet(gameState) && !HoleCards.isHighPair(holeCards)) {
+        } else if (isAllin() && !HoleCards.isHighPair(holeCards)) {
             return 0; // allin, de nincs magas kartyank
-        } else if (firstPlayer(gameState) && gameState.getCurrentBuyIn() <= bigBlind(gameState)) {
-            return minimumRaise(gameState, ourBet, betToCall);
+        } else if (firstPlayer() && gameState.getCurrentBuyIn() <= bigBlind()) {
+            return minimumRaise(ourBet, betToCall);
         } else if (shouldRaise(holeCards)) {
             if (goodStartingCards(holeCards)) {
                 return callValue(ourBet, betToCall) + gameState.getPot();
-            } else if (gameState.getCurrentBuyIn() <= bigBlind(gameState)) {
-                return minimumRaise(gameState, ourBet, betToCall);
+            } else if (gameState.getCurrentBuyIn() <= bigBlind()) {
+                return minimumRaise(ourBet, betToCall);
             } else {
                 callValue(ourBet, betToCall);
             }
-        } else if (mikiMagic2(gameState)) {
+        } else if (mikiMagic2()) {
             return callValue(ourBet, betToCall);
         }
         return 0;
     }
 
-    private static boolean firstPlayer(GameState gameState) {
-        return ((gameState.getDealer()+1) % gameState.getPlayers().size()) == gameState.getInAction();
+    private static boolean firstPlayer() {
+        return ((currentGameState.getDealer()+1) % currentGameState.getPlayers().size()) == currentGameState.getInAction();
     }
 
     private static boolean goodStartingCards(List<Card> cards) {
@@ -54,8 +51,8 @@ public class Player {
                 HoleCards.facecards(cards);
     }
 
-    private static int minimumRaise(GameState gameState, double ourBet, double betToCall) {
-        return callValue(ourBet, betToCall) + gameState.getMinimumRaise();
+    private static int minimumRaise(double ourBet, double betToCall) {
+        return callValue(ourBet, betToCall) + currentGameState.getMinimumRaise();
     }
 
     private static int callValue(double ourBet, double betToCall) {
@@ -74,18 +71,18 @@ public class Player {
                 HoleCards.facecards(cards);
     }
 
-    private static boolean mikiMagic2(GameState gameState) {
-        int bigBlind = bigBlind(gameState);
-        return gameState.getCurrentBuyIn() > bigBlind && !isBigBet(gameState);
+    private static boolean mikiMagic2() {
+        int bigBlind = bigBlind();
+        return currentGameState.getCurrentBuyIn() > bigBlind && !isAllin();
     }
 
-    private static int bigBlind(GameState gameState) {
-        return gameState.getSmallBlind() * 2;
+    private static int bigBlind() {
+        return currentGameState.getSmallBlind() * 2;
     }
 
-    private static boolean isBigBet(GameState gameState) {
-        double betNeeded = gameState.getCurrentBuyIn() - getOurPlayer(gameState).getBet();
-        double betNeededToStackRatio = betNeeded / getOurPlayer(gameState).getStack();
+    private static boolean isAllin() {
+        double betNeeded = currentGameState.getCurrentBuyIn() - getOurPlayer(currentGameState).getBet();
+        double betNeededToStackRatio = betNeeded / getOurPlayer(currentGameState).getStack();
         return betNeededToStackRatio > BIG_BET_TRESHOLD;
     }
 
