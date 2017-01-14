@@ -27,4 +27,13 @@ public class Player {
 
     public static void showdown(JsonElement game) {
     }
+
+    private static Opponent getOurPlayer(GameState gameState) {
+        for (Opponent player : gameState.getPlayers()) {
+            if (IN_ACTION.equals(player.getStatus())) {
+                return player;
+            }
+        }
+        return null;
+    }
 }
