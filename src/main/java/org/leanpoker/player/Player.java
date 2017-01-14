@@ -117,7 +117,7 @@ public class Player {
                 nrOfPlayers++;
             }
         }
-        return sum / nrOfPlayers;
+        return (double)sum / (double)nrOfPlayers;
     }
 
     private static double stackToBigBlindRatio(Opponent player) {
