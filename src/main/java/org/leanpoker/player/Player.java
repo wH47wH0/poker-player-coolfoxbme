@@ -12,7 +12,7 @@ public class Player {
     public static final String IN_ACTION = "in_action";
 
     public static int betRequest(GameState gameState) {
-        double ourBet =0;
+        double ourBet = 0;
 
         List<Opponent> players = gameState.getPlayers();
         for (Opponent player : players) {
