@@ -1,13 +1,14 @@
 package org.leanpoker.player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by hamargyuri on 2017. 01. 14..
  */
 public class Hand {
-    private final String STRAIGHT = "234567891011121314";
+    private final static String STRAIGHT = "234567891011121314";
 
     public static boolean hasPoker(List<Card> hand) {
         return sameRanksCheck(hand).contains(4);
@@ -26,11 +27,20 @@ public class Hand {
     }
 
     public static boolean hasFlush(List<Card> hand){
-        return false;
+        return sameSuitsCheck(hand).contains(5);
     }
 
     public static boolean hasStraight(List<Card> hand){
-        return false;
+        List<Integer> values = new ArrayList<>();
+        String valueString = "";
+        for (Card card : hand) {
+            values.add(card.getRank());
+        }
+        Collections.sort(values);
+        for (int value : values) {
+            valueString += value;
+        }
+        return STRAIGHT.contains(valueString);
     }
 
 
@@ -46,5 +56,19 @@ public class Hand {
             sameRanks.add(timesInHand);
         }
         return sameRanks;
+    }
+
+    private static List<Integer> sameSuitsCheck(List<Card> hand) {
+        List<Integer> sameSuits = new ArrayList<>();
+        for (Card card : hand) {
+            int timesInHand = 0;
+            for (Card compareCard : hand) {
+                if (card.getSuit().equals(compareCard.getSuit())) {
+                    timesInHand += 1;
+                }
+            }
+            sameSuits.add(timesInHand);
+        }
+        return sameSuits;
     }
 }
