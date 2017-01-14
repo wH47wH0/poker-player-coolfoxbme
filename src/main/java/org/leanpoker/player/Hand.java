@@ -36,10 +36,9 @@ public class Hand {
 
     private static List<Integer> sameRanksCheck(List<Card> hand) {
         List<Integer> sameRanks = new ArrayList<>();
-        List<Card> compareList = hand;
         for (Card card : hand) {
             int timesInHand = 0;
-            for (Card compareCard : compareList) {
+            for (Card compareCard : hand) {
                 if (card.getRank() == compareCard.getRank()) {
                     timesInHand += 1;
                 }
