@@ -11,3 +11,5 @@ This is a gradle project that can be imported into any IDE. To run the player ex
 or
 
 `./gradlew tomcatRun`
+
+https://web.fe.up.pt/~niadr/PUBLICATIONS/2013/TeofiloReisLopesCardoso_ComputingCardProbabilitiesInTexasHoldem.pdf
