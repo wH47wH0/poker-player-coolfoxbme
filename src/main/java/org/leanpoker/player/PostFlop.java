@@ -15,7 +15,11 @@ public class PostFlop {
         double betToCall = gameState.getCurrentBuyIn();
         double ourStack = Player.getOurPlayer().getStack();
         int commCardStrength = Hand.combinationValue(gameState.getCommunityCards());
-        int handStrength = Hand.combinationValue(hand);
+        double handStrength = Hand.combinationValue(hand);
+
+        if (handStrength == 2 && Hand.hasFlushDraw(hand)) {
+            handStrength *= 2.5d;
+        }
 
 //        return checkStrength(handStrength, gameState);
 
@@ -52,6 +56,7 @@ public class PostFlop {
         return hand;
     }
 
+    //not in use
     private static int checkStrength(int handStrength, int commCardStrength, GameState gameState, double ourBet, double betToCall){
         if (handStrength == commCardStrength) {
             return 0;
@@ -70,12 +75,16 @@ public class PostFlop {
         } else return 0;
     }
 
-    private static int MikiPostFlopMagic(List<Card> hand) {
-        if (hand.size()<7) {
-            if (Hand.combinationValue(hand)<5 && Hand.hasFlushDraw(hand)) {
-                // TODO:
-            }
-        }
-        return 0;
-    }
+//    private static double flushDrawLogic(List<Card> hand, int ourStack, int ourBet, int betToCall) {
+//        if (Hand.combinationValue(hand)<5 && Hand.hasFlushDraw(hand)) {
+//            if (hand.size()<7) {
+//                // turn
+//                return 1.15d;
+//            } else if (hand.size()<6) {
+//                // flop
+//                return 1.5d;
+//            }
+//        }
+//        return 1;
+//    }
 }
