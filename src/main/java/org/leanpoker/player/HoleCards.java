@@ -30,4 +30,8 @@ public class HoleCards {
     private static boolean twoGapper(Integer val1, Integer val2) {
         return Math.abs(val1 - val2) == 3;
     }
+
+    private static boolean sameSuit(String suit1, String suit2) {
+        return suit1.equals(suit2);
+    }
 }
