@@ -28,7 +28,9 @@ public class Player {
     }
 
     private static int preFlop(double ourBet, double betToCall, List<Card> holeCards) {
-        if (isAllin() && HoleCards.isHighPair(holeCards)) { // // ALLIN ES MAGAS PAR, STACKET BERAKNI
+        if (gameState.getCurrentBuyIn() <= bigBlind()) {
+            return minimumRaise(ourBet, betToCall);
+        } else if (isAllin() && HoleCards.isHighPair(holeCards)) { // // ALLIN ES MAGAS PAR, STACKET BERAKNI
             return (int) getOurPlayer().getStack();
         } else if (isAllin() && !HoleCards.isHighPair(holeCards)) {
             return 0; // allin, de nincs magas kartyank
