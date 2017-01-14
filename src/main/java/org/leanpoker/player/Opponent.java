@@ -1,5 +1,7 @@
 package org.leanpoker.player;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,6 +13,7 @@ public class Opponent {
     @JsonProperty("version") private String version;
     @JsonProperty("stack") private double stack;
     @JsonProperty("bet") private double bet;
+    @JsonProperty("hole_cards") private List<Card> holeCards;
 
     public String getId() {
         return id;
@@ -34,5 +37,9 @@ public class Opponent {
 
     public double getBet() {
         return bet;
+    }
+
+    public List<Card> getHoleCards() {
+        return holeCards;
     }
 }
