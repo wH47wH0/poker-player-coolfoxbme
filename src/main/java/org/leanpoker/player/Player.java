@@ -23,7 +23,8 @@ public class Player {
             return preFlop(ourBet, betToCall, holeCards);
         } else { // POSTFLOP
             // TODO: postflop
-            return preFlop(ourBet, betToCall, holeCards);
+            return PostFlop.postFlop(gameState,holeCards);
+//            return preFlop(ourBet, betToCall, holeCards);
         }
     }
 
@@ -67,10 +68,9 @@ public class Player {
                 (HoleCards.connector(holeCards) && HoleCards.sameSuit(holeCards) && HoleCards.highcards(holeCards, 5));
     }
 
-    private static int postFlop() {
-        // TODO: implement me
-        return 0;
-    }
+//    private static int postFlop(List<Card> holeCards) {
+//        return PostFlop.postFlop(gameState,holeCards);
+//    }
 
     private static boolean firstPlayer() {
         return ((gameState.getDealer()+1) % gameState.getPlayers().size()) == gameState.getInAction();
