@@ -1,7 +1,5 @@
 package org.leanpoker.player;
 
-import com.sun.beans.editors.IntegerEditor;
-
 /**
  * Created by miki on 2017. 01. 14..
  */
