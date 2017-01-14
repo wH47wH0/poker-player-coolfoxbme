@@ -28,7 +28,13 @@ public class Player {
     }
 
     private static int preFlop(double ourBet, double betToCall, List<Card> holeCards) {
-        if (gameState.getCurrentBuyIn() <= bigBlind()) {
+        if (avgStackToBigBlindRation() < 10) {
+            if (shouldAllinIfAvgStackToBigBlindIsSmall(holeCards)) {
+                return (int)getOurPlayer().getStack();
+            } else {
+                return 0;
+            }
+        }else if (gameState.getCurrentBuyIn() <= bigBlind()) {
             return minimumRaise(ourBet, betToCall);
         } else if (isAllin() && HoleCards.isHighPair(holeCards)) { // // ALLIN ES MAGAS PAR, STACKET BERAKNI
             return (int) getOurPlayer().getStack();
@@ -48,6 +54,13 @@ public class Player {
             return callValue(ourBet, betToCall);
         }
         return 0;
+    }
+
+    private static boolean shouldAllinIfAvgStackToBigBlindIsSmall(List<Card> holeCards) {
+        return HoleCards.facecards(holeCards) ||
+                HoleCards.aceXhands(holeCards) ||
+                HoleCards.pocketPair(holeCards) ||
+                (HoleCards.connector(holeCards) && HoleCards.sameSuit(holeCards) && HoleCards.highcards(holeCards, 5));
     }
 
     private static int postFlop() {
@@ -89,6 +102,18 @@ public class Player {
     private static boolean mikiMagic2() {
         int bigBlind = bigBlind();
         return gameState.getCurrentBuyIn() > bigBlind && !isAllin();
+    }
+
+    private static double avgStackToBigBlindRation() {
+        int sum = 0;
+        for (Opponent player : gameState.getPlayers()) {
+            sum += stackToBigBlindRatio(player);
+        }
+        return sum / gameState.getPlayers().size();
+    }
+
+    private static double stackToBigBlindRatio(Opponent player) {
+        return bigBlind() / player.getStack();
     }
 
     private static int bigBlind() {
