@@ -22,11 +22,23 @@ public class Player {
         } else if (isBigBet(gameState) && !HoleCards.isHighPair(holeCards)) {
             return 0; // allin, de nincs magas kartyank
         } else if (shouldRaise(holeCards)) {
-            return (int) (betToCall - ourBet + gameState.getMinimumRaise());
+            if (gameState.getCurrentBuyIn() <= bigBlind(gameState)) {
+                return minimumRaise(gameState, ourBet, betToCall);
+            } else {
+                callValue(ourBet, betToCall);
+            }
         } else if (mikiMagic2(gameState)) {
-            return  (int)(betToCall - ourBet);
+            return callValue(ourBet, betToCall);
         }
         return 0;
+    }
+
+    private static int minimumRaise(GameState gameState, double ourBet, double betToCall) {
+        return callValue(ourBet, betToCall) + gameState.getMinimumRaise();
+    }
+
+    private static int callValue(double ourBet, double betToCall) {
+        return (int)(betToCall - ourBet);
     }
 
     public static void showdown(JsonElement game) {
@@ -42,8 +54,12 @@ public class Player {
     }
 
     private static boolean mikiMagic2(GameState gameState) {
-        int bigBlind = gameState.getSmallBlind() * 2;
+        int bigBlind = bigBlind(gameState);
         return gameState.getCurrentBuyIn() > bigBlind && !isBigBet(gameState);
+    }
+
+    private static int bigBlind(GameState gameState) {
+        return gameState.getSmallBlind() * 2;
     }
 
     private static boolean isBigBet(GameState gameState) {
