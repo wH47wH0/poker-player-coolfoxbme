@@ -18,4 +18,16 @@ public class HoleCards {
         high = 8;
         return val1 >= high && val2 >= high;
     }
+
+    private static boolean connector(Integer val1, Integer val2) {
+        return Math.abs(val1 - val2) == 1;
+    }
+
+    private static boolean oneGapper(Integer val1, Integer val2) {
+        return Math.abs(val1 - val2) == 2;
+    }
+
+    private static boolean twoGapper(Integer val1, Integer val2) {
+        return Math.abs(val1 - val2) == 3;
+    }
 }
