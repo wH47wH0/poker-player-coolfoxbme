@@ -19,7 +19,7 @@ public class PostFlop {
 
 //        return checkStrength(handStrength, gameState);
 
-        if (betToCall > gameState.getSmallBlind() * 2) {
+        if (betToCall == gameState.getSmallBlind() * 2) {
             return  Player.callValue(ourBet, betToCall);
         } else if (betToCall < ourStack/3) {
             if ((commCardStrength != handStrength) && handStrength >= 2) {
@@ -60,5 +60,13 @@ public class PostFlop {
             // TODO: call if there wasn't a bet
             return 0;
         } else return 0;
+    }
+
+    private static int MikiPostFlopMagic(List<Card> hand) {
+        if (hand.size()<7) {
+            if (Hand.combinationValue(hand)<5 && Hand.hasFlushDraw(hand)) {
+                // TODO:
+            }
+        }
     }
 }

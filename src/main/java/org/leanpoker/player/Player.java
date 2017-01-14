@@ -22,7 +22,6 @@ public class Player {
         if (Player.gameState.getCommunityCards() == null || Player.gameState.getCommunityCards().size() == 0) {
             return preFlop(ourBet, betToCall, holeCards);
         } else { // POSTFLOP
-            // TODO: postflop
             return PostFlop.postFlop(gameState,holeCards);
 //            return preFlop(ourBet, betToCall, holeCards);
         }
