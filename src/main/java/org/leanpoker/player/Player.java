@@ -111,7 +111,9 @@ public class Player {
     private static double avgStackToBigBlindRatio() {
         int sum = 0;
         for (Opponent player : gameState.getPlayers()) {
-            sum += stackToBigBlindRatio(player);
+            if ("out".equals(player.getStatus())) {
+                sum += stackToBigBlindRatio(player);
+            }
         }
         return sum / gameState.getPlayers().size();
     }
