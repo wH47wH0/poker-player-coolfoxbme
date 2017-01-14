@@ -99,7 +99,7 @@ public class Player {
             return minimumRaise(ourBet, betToCall);
         } else if (shouldRaise(holeCards)) {
             if (goodStartingCards(holeCards)) {
-                System.out.println("callValue: " + callValue(ourBet, betToCall) + " pot: " + gameState.getPot());
+                System.out.println("callValue: " + callValue(ourBet, betToCall) + " pot: " + gameState.getPot() + " ratio: " + avgStackToBigBlindRation());
                 return callValue(ourBet, betToCall) + gameState.getPot();
             } else if (gameState.getCurrentBuyIn() <= bigBlind()) {
                 return minimumRaise(ourBet, betToCall);
@@ -160,11 +160,12 @@ public class Player {
     }
 
     private static double avgStackToBigBlindRation() {
+        long count = gameState.getPlayers().stream().filter(p -> !"out".equals(p.getStatus())).count();
         int sum = 0;
         for (Opponent player : gameState.getPlayers()) {
             sum += stackToBigBlindRatio(player);
         }
-        return sum / gameState.getPlayers().size();
+        return sum / count;
     }
 
     private static double stackToBigBlindRatio(Opponent player) {
