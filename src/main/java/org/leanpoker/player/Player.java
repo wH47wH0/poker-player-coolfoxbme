@@ -22,7 +22,9 @@ public class Player {
         } else if (isBigBet(gameState) && !HoleCards.isHighPair(holeCards)) {
             return 0; // allin, de nincs magas kartyank
         } else if (shouldRaise(holeCards)) {
-            if (gameState.getCurrentBuyIn() <= bigBlind(gameState)) {
+            if (goodStartingCards(holeCards)) {
+                return callValue(ourBet, betToCall) + gameState.getPot();
+            } else if (gameState.getCurrentBuyIn() <= bigBlind(gameState)) {
                 return minimumRaise(gameState, ourBet, betToCall);
             } else {
                 callValue(ourBet, betToCall);
@@ -31,6 +33,13 @@ public class Player {
             return callValue(ourBet, betToCall);
         }
         return 0;
+    }
+
+    private static boolean goodStartingCards(List<Card> cards) {
+        return (HoleCards.pocketPair(cards) && HoleCards.highcards(cards, 8)) ||
+                (HoleCards.aceXhands(cards) && HoleCards.highcards(cards, 10)) ||
+                (HoleCards.connector(cards) && HoleCards.sameSuit(cards) && HoleCards.highcards(cards, 9)) ||
+                HoleCards.facecards(cards);
     }
 
     private static int minimumRaise(GameState gameState, double ourBet, double betToCall) {
