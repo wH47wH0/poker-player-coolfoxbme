@@ -28,8 +28,7 @@ public class PostFlop {
                 } else {
                     return  Player.callValue(ourBet, betToCall);
                 }
-            }
-            return Player.minimumRaise(ourBet, betToCall);
+            } else return Player.minimumRaise(ourBet, betToCall);
         } else return 0;
     }
 
@@ -68,5 +67,6 @@ public class PostFlop {
                 // TODO:
             }
         }
+        return 0;
     }
 }
