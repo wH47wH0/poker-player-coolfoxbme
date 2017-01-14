@@ -1,5 +1,6 @@
 package org.leanpoker.player;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonParser;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,8 @@ import java.io.IOException;
 @WebServlet("/")
 public class PlayerServlet extends HttpServlet {
 
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.getWriter().print("Java player is running");
@@ -21,6 +24,8 @@ public class PlayerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("action").equals("bet_request")) {
             String gameState = req.getParameter("game_state");
+
+            GameState gameStateObject = objectMapper.readValue(gameState, GameState.class);
 
             resp.getWriter().print(Player.betRequest(new JsonParser().parse(gameState)));
         }

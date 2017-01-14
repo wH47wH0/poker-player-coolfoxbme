@@ -40,6 +40,9 @@ buildscript {
 dependencies {
     testCompile 'junit:junit:4.11'
     compile 'com.google.code.gson:gson:2.2.4'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.0.1'
+
     def tomcatVersion = '7.0.11'
 
     providedCompile "org.apache.tomcat:tomcat-servlet-api:${tomcatVersion}"
