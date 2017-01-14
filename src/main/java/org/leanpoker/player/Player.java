@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Player {
 
-    static final String VERSION = "CoolFoxBme";
+    static final String VERSION = "CoolFoxBme will totally defeat Angry Piglets";
     public static final double BIG_BET_TRESHOLD = 0.2;
 
     private static GameState gameState;
@@ -28,13 +28,16 @@ public class Player {
     }
 
     private static int preFlop(double ourBet, double betToCall, List<Card> holeCards) {
-        if (avgStackToBigBlindRation() < 10) {
+        if (avgStackToBigBlindRatio() < 10) {
             if (shouldAllinIfAvgStackToBigBlindIsSmall(holeCards)) {
                 return (int)getOurPlayer().getStack();
             } else {
                 return 0;
             }
-        }else if (gameState.getCurrentBuyIn() <= bigBlind()) {
+        } else if (gameState.getCurrentBuyIn() < gameState.getPot() && gameState.getBetIndex() > gameState.getPlayers().size()) {
+            return callValue(ourBet, betToCall);
+        }
+        else if (gameState.getCurrentBuyIn() <= bigBlind()) {
             return minimumRaise(ourBet, betToCall);
         } else if (isAllin() && HoleCards.isHighPair(holeCards)) { // // ALLIN ES MAGAS PAR, STACKET BERAKNI
             return (int) getOurPlayer().getStack();
@@ -105,7 +108,7 @@ public class Player {
         return gameState.getCurrentBuyIn() > bigBlind && !isAllin();
     }
 
-    private static double avgStackToBigBlindRation() {
+    private static double avgStackToBigBlindRatio() {
         int sum = 0;
         for (Opponent player : gameState.getPlayers()) {
             sum += stackToBigBlindRatio(player);
