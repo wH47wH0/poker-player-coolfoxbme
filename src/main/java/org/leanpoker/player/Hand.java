@@ -22,16 +22,6 @@ public class Hand {
         return sameRanksCheck(hand).contains(2);
     }
 
-    public static boolean hasTwoPair(List<Card> hand) {
-        int numCount = 0;
-        if (sameRanksCheck(hand).contains(2)) {
-            for (int thisNum : sameRanksCheck(hand)) {
-                if (thisNum == 2) numCount++;
-            }
-        }
-        return numCount > 1;
-    }
-
     public static boolean hasFull(List<Card> hand) {
         return hasPair(hand) && hasDrill(hand);
     }
@@ -41,16 +31,17 @@ public class Hand {
     }
 
     public static boolean hasStraight(List<Card> hand){
-        List<Integer> values = new ArrayList<>();
-        String valueString = "";
-        for (Card card : hand) {
-            values.add(card.getRank());
+        return STRAIGHT.contains(sortRanks(hand));
+    }
+
+    public static boolean hasTwoPairs(List<Card> hand) {
+        int pairs = 0;
+        for (int ranks : sameRanksCheck(hand)) {
+            if (ranks==2) {
+                pairs += 1;
+            }
         }
-        Collections.sort(values);
-        for (int value : values) {
-            valueString += value;
-        }
-        return STRAIGHT.contains(valueString);
+        return pairs > 1;
     }
 
 
@@ -80,5 +71,23 @@ public class Hand {
             sameSuits.add(timesInHand);
         }
         return sameSuits;
+    }
+
+    private static String sortRanks(List<Card> hand) {
+        List<Integer> ranks = allRanks(hand);
+        String sortedRanks = "";
+        Collections.sort(ranks);
+        for (int rank : ranks) {
+            sortedRanks += rank;
+        }
+        return sortedRanks;
+    }
+
+    private static List<Integer> allRanks(List<Card> hand) {
+        List<Integer> ranks = new ArrayList<>();
+        for (Card card : hand) {
+            ranks.add(card.getRank());
+        }
+        return ranks;
     }
 }
