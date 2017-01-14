@@ -27,7 +27,7 @@ public class PlayerServlet extends HttpServlet {
 
             GameState gameStateObject = objectMapper.readValue(gameState, GameState.class);
 
-            resp.getWriter().print(Player.betRequest(new JsonParser().parse(gameState)));
+            resp.getWriter().print(Player.betRequest(gameStateObject));
         }
         if (req.getParameter("action").equals("showdown")) {
             String gameState = req.getParameter("game_state");
