@@ -10,6 +10,22 @@ import java.util.List;
 public class Hand {
     private final static String STRAIGHT = "234567891011121314";
 
+    public static int combinationValue(List<Card> hand) {
+        if (hasFull(hand)) {
+            return 7;
+        } else if (hasFlush(hand)) {
+            return 6;
+        } else if (hasStraight(hand)) {
+            return 5;
+        } else if (hasDrill(hand)) {
+            return 4;
+        } else if (hasTwoPairs(hand)) {
+            return 3;
+        } else if (hasPair(hand)) {
+            return 2;
+        } else return 1;
+    }
+
     public static boolean hasPoker(List<Card> hand) {
         return sameRanksCheck(hand).contains(4);
     }
@@ -26,11 +42,16 @@ public class Hand {
         return hasPair(hand) && hasDrill(hand);
     }
 
-    public static boolean hasFlush(List<Card> hand){
+    public static boolean hasFlush(List<Card> hand) {
         return sameSuitsCheck(hand).contains(5);
     }
 
-    public static boolean hasStraight(List<Card> hand){
+    public static boolean hasFlushDraw(List<Card> hand) {
+        // only use when we have 3 or 4 community cards
+        return sameSuitsCheck(hand).contains(4);
+    }
+
+    public static boolean hasStraight(List<Card> hand) {
         return STRAIGHT.contains(sortRanks(hand));
     }
 

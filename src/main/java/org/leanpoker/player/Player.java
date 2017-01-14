@@ -64,11 +64,11 @@ public class Player {
                 HoleCards.facecards(cards);
     }
 
-    private static int minimumRaise(double ourBet, double betToCall) {
+    public static int minimumRaise(double ourBet, double betToCall) {
         return callValue(ourBet, betToCall) + gameState.getMinimumRaise();
     }
 
-    private static int callValue(double ourBet, double betToCall) {
+    public static int callValue(double ourBet, double betToCall) {
         return (int)(betToCall - ourBet);
     }
 
@@ -99,7 +99,7 @@ public class Player {
         return betNeededToStackRatio > BIG_BET_TRESHOLD;
     }
 
-    private static Opponent getOurPlayer() {
+    public static Opponent getOurPlayer() {
         return gameState.getPlayers().get(gameState.getInAction());
     }
 
