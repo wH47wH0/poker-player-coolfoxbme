@@ -29,15 +29,15 @@ public class Player {
     }
 
     private static int preFlop(double ourBet, double betToCall, List<Card> holeCards) {
-        if (avgStackToBigBlindRatio() < 10) {
+        if (avgStackToBigBlindRation() < 10) {
             if (shouldAllinIfAvgStackToBigBlindIsSmall(holeCards)) {
                 return (int)getOurPlayer().getStack();
             } else {
                 return 0;
             }
-        } else if (gameState.getCurrentBuyIn() < gameState.getPot() && gameState.getBetIndex() > gameState.getPlayers().size()) {
+        } /*else if (gameState.getCurrentBuyIn() < gameState.getPot() && gameState.getBetIndex() > gameState.getPlayers().size()) {
             return callValue(ourBet, betToCall);
-        }
+        } */
         else if (gameState.getCurrentBuyIn() <= bigBlind()) {
             return minimumRaise(ourBet, betToCall);
         } else if (isAllin() && HoleCards.isHighPair(holeCards)) { // // ALLIN ES MAGAS PAR, STACKET BERAKNI
@@ -108,16 +108,12 @@ public class Player {
         return gameState.getCurrentBuyIn() > bigBlind && !isAllin();
     }
 
-    private static double avgStackToBigBlindRatio() {
+    private static double avgStackToBigBlindRation() {
         int sum = 0;
-        int nrOfPlayers = 0;
         for (Opponent player : gameState.getPlayers()) {
-            if ("out".equals(player.getStatus())) {
-                sum += stackToBigBlindRatio(player);
-                nrOfPlayers++;
-            }
+            sum += stackToBigBlindRatio(player);
         }
-        return (double)sum / (double)nrOfPlayers;
+        return sum / gameState.getPlayers().size();
     }
 
     private static double stackToBigBlindRatio(Opponent player) {
