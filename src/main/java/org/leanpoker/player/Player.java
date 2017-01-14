@@ -16,9 +16,11 @@ public class Player {
 
         List<Card> holeCards = getOurPlayer(gameState).getHoleCards();
 
-        if (HoleCards.pocketPair(holeCards) || (HoleCards.aceXhands(holeCards) && HoleCards.highcards(holeCards, 10))) {
-
-        return (int) (betToCall - ourBet + gameState.getMinimumRaise());
+        // ALLIN ES MAGAS PAR, STACKET BERAKNI
+        if (isBigBet(gameState) && HoleCards.pocketPair(holeCards) && HoleCards.highcards(holeCards, 11)) {
+            return (int) getOurPlayer(gameState).getStack();
+        } else if (HoleCards.pocketPair(holeCards) || (HoleCards.aceXhands(holeCards) && HoleCards.highcards(holeCards, 10))) {
+            return (int) (betToCall - ourBet + gameState.getMinimumRaise());
         }
         return 0;
     }
