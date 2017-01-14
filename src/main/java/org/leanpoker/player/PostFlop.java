@@ -20,7 +20,7 @@ public class PostFlop {
 //        return checkStrength(handStrength, gameState);
 
         if (betToCall == gameState.getSmallBlind() * 2) {
-            return  Player.callValue(ourBet, betToCall);
+            return Player.minimumRaise(ourBet, betToCall);
         } else if (betToCall < ourStack/3) {
             if ((commCardStrength != handStrength) && handStrength >= 2) {
                 if (handStrength >= 4) {
