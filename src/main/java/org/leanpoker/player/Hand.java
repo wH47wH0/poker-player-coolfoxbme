@@ -22,16 +22,6 @@ public class Hand {
         return sameRanksCheck(hand).contains(2);
     }
 
-    public static boolean hasTwoPair(List<Card> hand) {
-        int numCount = 0;
-        if (sameRanksCheck(hand).contains(2)) {
-            for (int thisNum : sameRanksCheck(hand)) {
-                if (thisNum == 2) numCount++;
-            }
-        }
-        return numCount > 1;
-    }
-
     public static boolean hasFull(List<Card> hand) {
         return hasPair(hand) && hasDrill(hand);
     }
