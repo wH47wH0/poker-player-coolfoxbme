@@ -23,7 +23,7 @@ public class PostFlop {
 
 //        return checkStrength(handStrength, gameState);
 
-        if (betToCall == gameState.getSmallBlind() * 2) {
+        if (betToCall == 0) {
             // raise if no bet
             return Player.minimumRaise(ourBet, betToCall);
         } else if (betToCall < ourStack/3) {
